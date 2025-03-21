@@ -1,0 +1,214 @@
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <title>Game Shooter</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Press Start 2P", cursive;
+    }
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    canvas {
+      display: block;
+      width: 100vw;
+      height: 100vh;
+    }
+    #startButton,
+    #creditButton,
+    #backHome,
+    #backHighScore,
+    #highScoreButton {
+      background: transparent;
+      color: white;
+    }
+    #startButton:hover,
+    #creditButton:hover,
+    #backHome:hover,
+    #backHighScore:hover,
+    #highScoreButton:hover {
+      background: white;
+      color: black;
+      transition: 0.5s ease-in-out;
+      box-shadow: 5px white;
+    }
+  </style>
+</head>
+<body>
+  <div
+    id="startScreen"
+    style="
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.9);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+      min-height: 100vh;
+      width: 100%;
+      background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+        url(./img/digital-art-style-illustration-thunderstorm.jpg);
+      background-position: center;
+      background-size: cover;
+      position: relative;
+    "
+  >
+    <h1>Game Shooter</h1>
+    <!-- Tempat untuk high score -->
+    <input
+      type="text"
+      id="playerName"
+      placeholder="Masukkan nama Anda"
+      style="padding: 10px 20px; margin: 10px"
+    />
+    <button id="startButton" style="padding: 10px 20px; margin: 10px">
+      Mulai Game
+    </button>
+    <button id="creditButton" style="padding: 10px 20px; margin: 10px">
+      Credit
+    </button>
+    <button id="highScoreButton" style="padding: 10px 20px; margin: 10px">
+      highScore
+    </button>
+  </div>
+
+  <div
+    id="creditScreen"
+    style="
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.9);
+      color: white;
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+      min-height: 100vh;
+      width: 100%;
+      background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+        url(./img/digital-art-style-illustration-thunderstorm.jpg);
+      background-position: center;
+      background-size: cover;
+      position: relative;
+    "
+  >
+    <h2>Credit</h2>
+    <p>Dibuat oleh: Rezza Fairus Nugraha</p>
+    <button id="backHome" style="padding: 10px 20px; margin: 10px">
+      Kembali
+    </button>
+  </div>
+  <div
+    id="highScoreScreen"
+    style="
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.9);
+      color: white;
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+      min-height: 100vh;
+      width: 100%;
+      background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+        url(./img/digital-art-style-illustration-thunderstorm.jpg);
+      background-position: center;
+      background-size: cover;
+      position: relative;
+    "
+  >
+    <h2>highScore</h2>
+    <div
+      id="highScoreList"
+      style="margin: 20px; font-size: 18px; color: yellow"
+    >
+      High Score: 0
+    </div>
+    <button id="backHighScore" style="padding: 10px 20px; margin: 10px">
+      Kembali
+    </button>
+  </div>
+  <div
+    id="gameOverScreen"
+    style="
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.9);
+      color: white;
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+    "
+  >
+    <h1 id="scor"></h1>
+    <br />
+    <button id="backHomeOver" style="padding: 10px 20px; margin: 10px">
+      Kembali
+    </button>
+  </div>
+
+  <div style="position: relative; display: none" id="Game">
+    <div
+      style="
+        position: absolute;
+        display: flex;
+        width: 100%;
+        align-items: center;
+        padding: 20px;
+      "
+    >
+      <div
+        id="timer"
+        style="
+          background-color: black;
+          width: 100px;
+          height: 50px;
+          flex-shrink: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          border: 4px solid white;
+        "
+      >
+        10
+      </div>
+      <div style="margin-left: 10px">
+        <span>Player 1 Score: <span id="playerScore">0</span></span>
+      </div>
+    </div>
+    <canvas> </canvas>
+  </div>
+  <script src="./javascript_game_tugas_akhir.js"></script>
+</body>
