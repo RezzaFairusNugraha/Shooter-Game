@@ -6,16 +6,16 @@
 
 Shooter Game ini merupakan proyek tugas akhir dari GameLab yang dikembangkan untuk menguji kemampuan dalam pengembangan game. Game ini mengusung konsep permainan tembak-menembak dengan mekanisme yang menantang dan interaktif.
 
-##A
+## A
 Untuk bergerak ke kiri
 
-##W
+## W
 Untuk bergerak ke atas
 
-##S
+## S
 Untuk bergerak ke kanan
 
-##Spasi
+## Spasi
 Untuk Menembak
 
-##Dan jika kamu ingin mendapatkan shield maka kamu harus dekatkan ke box maka akan mendapatkan shield
+## Dan jika kamu ingin mendapatkan shield maka kamu harus dekatkan ke box maka akan mendapatkan shield
