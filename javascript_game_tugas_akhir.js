@@ -77,7 +77,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // ===================
   // Kelas-Kelas
   // ===================
-
   class Sprite {
     constructor({
       position,
@@ -204,7 +203,9 @@ document.addEventListener("DOMContentLoaded", () => {
         this.velocity.y += gravity;
       }
     }
-    switchSprite(sprite) {}
+    switchSprite(sprite) {
+      // Implementasi switch sprite (jika ada asset animasi)
+    }
   }
 
   class EnemyFighter extends Fighter {
@@ -213,7 +214,6 @@ document.addEventListener("DOMContentLoaded", () => {
       this.size = 35;
       this.speedY = 7;
     }
-
     draw() {
       ctx.fillStyle = "purple";
       ctx.beginPath();
@@ -298,7 +298,49 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ===================
-  // Game Logic
+  // Shield Pickup Object
+  // ===================
+  let shieldPickup = {
+    position: { x: canvas.width / 2 - 25, y: canvas.height / 2 - 25 }, // contoh di tengah
+    width: 50,
+    height: 50,
+    active: true,
+  };
+
+  // Gambar objek shield pickup
+  function drawShieldPickup() {
+    if (!shieldPickup.active) return;
+    ctx.save();
+    ctx.fillStyle = "cyan";
+    ctx.fillRect(
+      shieldPickup.position.x,
+      shieldPickup.position.y,
+      shieldPickup.width,
+      shieldPickup.height
+    );
+    ctx.strokeStyle = "blue";
+    ctx.lineWidth = 3;
+    ctx.strokeRect(
+      shieldPickup.position.x,
+      shieldPickup.position.y,
+      shieldPickup.width,
+      shieldPickup.height
+    );
+    ctx.restore();
+  }
+
+  // Collision detection untuk shield pickup (bounding box sederhana)
+  function collisionWithShield(player, shield) {
+    return (
+      player.position.x < shield.position.x + shield.width &&
+      player.position.x + player.width > shield.position.x &&
+      player.position.y < shield.position.y + shield.height &&
+      player.position.y + player.height > shield.position.y
+    );
+  }
+
+  // ===================
+  // Timer Countdown
   // ===================
   function decreaseTimer() {
     if (timer > 0) {
@@ -312,6 +354,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // ===================
+  // Mulai Game
+  // ===================
   function startGame() {
     if (enemyInterval) clearInterval(enemyInterval);
     if (animationId) cancelAnimationFrame(animationId);
@@ -369,6 +414,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
       player.update();
       enemy.update();
+
+      // Gambar objek shield pickup dan cek collision dengan player
+      drawShieldPickup();
+      if (shieldPickup.active && collisionWithShield(player, shieldPickup)) {
+        shieldPickup.active = false; // Sembunyikan objek pickup
+        player.isShieldActive = true;
+
+        // Setelah 5 detik, hapus efek shield dan respawn pickup di posisi acak
+        setTimeout(() => {
+          player.isShieldActive = false;
+          shieldPickup.position.x =
+            Math.random() * (canvas.width - shieldPickup.width);
+          shieldPickup.position.y =
+            Math.random() * (canvas.height - shieldPickup.height - 100) + 50;
+          shieldPickup.active = true;
+        }, 5000);
+      }
 
       if (keys.a.pressed) {
         player.velocity.x = -5;
@@ -452,7 +514,7 @@ document.addEventListener("DOMContentLoaded", () => {
           player.jumpCount++;
         }
       } else if (event.key === " ") {
-        if (player.canShoot && !player.isShieldActive) {
+        if (player.canShoot) {
           bullets.push(
             new Bullet({
               position: {
@@ -471,10 +533,8 @@ document.addEventListener("DOMContentLoaded", () => {
             player.canShoot = true;
           }, 800);
         }
-      } else if (event.key === "q") {
-        player.isShieldActive = true;
-        player.canShoot = false;
       }
+      // Jika sebelumnya menggunakan tombol "q" untuk shield, kita nonaktifkan event tersebut.
     }
   });
   window.addEventListener("keyup", (event) => {
@@ -483,9 +543,6 @@ document.addEventListener("DOMContentLoaded", () => {
       keys.d.pressed = false;
     } else if (event.key === "a") {
       keys.a.pressed = false;
-    } else if (event.key === "q") {
-      player.isShieldActive = false;
-      player.canShoot = true;
     }
   });
 
@@ -550,7 +607,7 @@ document.addEventListener("DOMContentLoaded", () => {
     startScreen.style.display = "flex";
 
     playerScore = 0;
-    timer = 5;
+    timer = 60;
     isGameOver = false;
     gameStarted = false;
     bullets = [];
